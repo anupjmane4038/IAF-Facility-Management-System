@@ -1,0 +1,113 @@
+<% layout ('layouts/boilerplate')%>
+  <!DOCTYPE html>
+  <html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews Section</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Montserrat', sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f9f9f9;
+      }
+
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 30px;
+        margin-top: -200px;
+      }
+
+      .section-header h2 {
+        font-size: 36px;
+        margin-bottom: 10px;
+      }
+
+      .reviews-grid {
+        display: grid;
+        gap: 30px;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+
+      .review-card {
+        background-color: #fff;
+        border-radius: 50px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .review-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .review-content {
+        padding: 30px;
+      }
+
+      .reviewer-name {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+
+      .review-feedback {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #666;
+      }
+
+      @media (max-width: 960px) {
+
+        .section-header h2 {
+          font-size: 28px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <section class="reviews-section">
+      <div class="container">
+        <div class="section-header"><br><br><br><br><br><br>
+          <h2>Latest Reviews</h2>
+        </div>
+        <div class="reviews-grid">
+          <% for (let i=reviewlist.length-1; i>= Math.max(0, reviewlist.length - 6); i--) { %>
+            <% let review=reviewlist[i]; %>
+              <div class="review-card">
+                <div class="review-content" align="center">
+                  <p class="reviewer-name">
+                    <%= review.name %>
+                  </p>
+                  <blockquote class="review-feedback">
+                    <%= review.feedback %>
+                  </blockquote>
+                </div>
+              </div>
+              <% } %>
+        </div>
+      </div>
+
+    </section>
+  </body>
+
+  </html>

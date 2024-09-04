@@ -1,0 +1,298 @@
+<% layout('layouts/boilerplate') %>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>All Bookings</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Montserrat', sans-serif;
+                line-height: 1.6;
+                color: #333;
+                background-color: #f5f5f5;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                font-weight: 700;
+            }
+
+            .container {
+                width: 100%;
+                max-width: 100%;
+                padding: 35px;
+                margin: auto;
+                overflow-x: auto;
+                text-align: center;
+            }
+
+            h1 {
+                font-size: 36px;
+                text-align: center;
+                margin-bottom: -10px;
+            }
+
+            h2 {
+                margin-bottom: 20px;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                border-radius: 30px;
+                overflow: hidden;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                margin-top: -10px;
+                margin-bottom: 25px;
+                font-size: 12px;
+            }
+
+            th,
+            td {
+                padding: 12px;
+                text-align: center;
+                border-bottom: 1px solid #ddd;
+                border-right: 1px solid #ddd;
+            }
+
+            th {
+                background-color: #f5f5f5;
+                color: #333;
+            }
+
+            tr {
+                background-color: #fff;
+            }
+
+            .btn-success {
+                background-color: #28a745;
+                color: #fff;
+                padding: 10px 20px;
+                transition: background-color 0.3s;
+                text-decoration: none;
+            }
+
+            .btn-danger {
+                background-color: #dc3545;
+                color: #fff;
+                padding: 10px 20px;
+                transition: background-color 0.3s;
+                text-decoration: none;
+            }
+
+            .btn-success-1 {
+                background-color: #28a745;
+                color: #fff;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 20px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+                margin: 5px 5px;
+                text-decoration: none;
+            }
+
+            .btn-danger-1 {
+                background-color: #dc3545;
+                color: #fff;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 20px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+                text-decoration: none;
+                margin: 5px 5px;
+            }
+
+            .btn-success-1:hover,
+            .btn-success:hover {
+                background-color: #218838;
+            }
+
+            .btn-danger-1:hover,
+            .btn-danger:hover {
+                background-color: #c82333;
+            }
+
+            .no-requests {
+                margin-top: 35px;
+                font-style: italic;
+                color: #999;
+            }
+
+            .month-actions {
+                margin: 10px 0;
+            }
+
+            .action-btn {
+                background-color: #007bff;
+                color: #fff;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 20px;
+                cursor: pointer;
+                margin: 0 5px;
+                text-decoration: none;
+                transition: background-color 0.3s;
+            }
+
+            .action-btn:hover {
+                background-color: #0056b3;
+            }
+
+            a {
+                color: #fff;
+                /* Set the text color to white */
+                text-decoration: none;
+                /* Remove underline */
+            }
+
+            .action-btn a:hover {
+                text-decoration: none;
+                /* Ensure underline does not appear on hover */
+            }
+
+            @media (max-width: 1050px) {
+                h1 {
+                    font-size: 28px;
+                }
+
+                table {
+                    font-size: 14px;
+                }
+
+                td,
+                th {
+                    padding: 8px;
+                }
+            }
+
+            /* Your existing CSS styles */
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>Booking Slots</h1>
+
+            <% if (messages.error) { %>
+                <div class="alert alert-danger">
+                    <%= messages.error %>
+                </div>
+                <% } %>
+
+                    <% if (messages.success) { %>
+                        <div class="alert alert-success">
+                            <%= messages.success %>
+                        </div>
+                        <% } %>
+
+                            <% // Filter months with bookings
+                                filteredGroupedBookings=Object.keys(groupedBookings).filter(monthYear=> {
+                                const dates = groupedBookings[monthYear].dates;
+                                return Object.values(dates).some(date => Array.isArray(date) && date.length > 0);
+                                }).reverse();
+                                %>
+
+                                <% if (filteredGroupedBookings.length===0) { %>
+                                    <p class="no-requests">No approved bookings found.</p>
+                                    <% } else { %>
+                                        <% filteredGroupedBookings.forEach(monthYear=> { %>
+                                            <br>
+                                            <h2>
+                                                <%= monthYear %>
+                                            </h2>
+                                            <% if (currentUser.card===-1) { %>
+                                                <div class="month-actions">
+
+                                                    <a href="/export/month?monthYear=<%= encodeURIComponent(monthYear) %>"
+                                                        class="btn btn-success-1">
+                                                        Export as Excel
+                                                    </a>
+                                                    <a href="#"
+                                                        onclick="return confirmDelete('<%= encodeURIComponent(monthYear) %>');"
+                                                        class="btn btn-danger-1">
+                                                        Delete Table
+                                                    </a>
+
+                                                </div>
+                                                <% } %>
+                                                    <br>
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Room Name</th>
+                                                                <% const monthYearParts=monthYear.split(' '); %>
+                            <% const month = monthYearParts[0]; %>
+                            <% const year = monthYearParts[1]; %>
+                            <% const daysInMonth = new Date(year, monthNames.indexOf(month) + 1, 0).getDate(); %>
+                            <% for (let i = 1; i <= daysInMonth; i++) { %>
+                                <th><%= i %></th>
+                            <% } %>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% rooms.forEach(room => { %>
+                            <tr>
+                                <td><strong><%= room.roomName %></strong></td>
+                                <% const dates = groupedBookings[monthYear].dates; %>
+                                <% for (let day = 1; day <= daysInMonth; day++) { %>
+                                    <% const bookingsForDate = dates[day]; %>
+                                    <% let userName = ''; %>
+                                    <% let userProfileUrl = ''; %>
+                                    <% if (bookingsForDate && Array.isArray(bookingsForDate)) { %>
+                                        <% const booking = bookingsForDate.find(b => b.room && b.room._id.toString() === room._id.toString()); %>
+                                        <% if (booking && booking.user) { %>
+                                            <% userName = booking.user.name; %>
+                                            <% userProfileUrl = ' /profile/' + booking.user._id; %>
+                                                                    <% } %>
+                                                                        <% } %>
+                                                                            <td
+                                                                                class="<%= userName ? 'btn-danger' : 'btn-success' %>">
+                                                                                <% if (currentUser.card===-1 ||
+                                                                                    currentUser.card===-2) { %>
+                                                                                    <% if (userName) { %>
+                                                                                        <% if (currentUser.card===-1) {
+                                                                                            %>
+                                                                                            <a
+                                                                                                href="<%= userProfileUrl %>">
+                                                                                                <%= userName %>
+                                                                                            </a>
+                                                                                            <% } else { %>
+                                                                                                <%= userName %>
+                                                                                                    <% } %>
+                                                                                                        <% } %>
+                                                                                                            <% } %>
+                                                                            </td>
+                                                                            <% } %>
+                                                            </tr>
+                                                            <% }) %>
+                                                                </tbody>
+                                                    </table>
+                                                    <% }) %>
+                                                        <% } %>
+        </div>
+
+        <script>
+            function confirmDelete(monthYear) {
+                return confirm('Are you sure you want to delete all bookings for ' + decodeURIComponent(monthYear) + '?');
+            }
+        </script><br><br>
+    </body>
+
+    </html>

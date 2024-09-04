@@ -1,0 +1,130 @@
+<% layout('layouts/boilerplate') %>
+  <!DOCTYPE html>
+  <html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Section</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Montserrat', sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f5f5f5;
+        margin-bottom: 25px;
+        /* Bottom margin to accommodate the footer */
+      }
+
+      .container {
+        margin: 0 auto;
+        /* Center container horizontally */
+        padding: 0 20px;
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 20px;
+        margin-top: -150px;
+        /* Adjust this margin to match your previous layout */
+      }
+
+      .section-header h2 {
+        font-size: 36px;
+        margin-bottom: 10px;
+      }
+
+      .reviews-grid {
+        display: grid;
+        gap: 30px;
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .review-card {
+        background-color: #fff;
+        border-radius: 50px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+        display: flex;
+        justify-content: center;
+        /* Center content horizontally */
+        align-items: center;
+        /* Center content vertically */
+        text-align: center;
+        /* Center text within the card */
+      }
+
+      .review-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .reviewer-name {
+        font-size: 25px;
+        font-weight: bold;
+        margin: 20px auto;
+        /* Center the name within the card */
+      }
+
+      a {
+        text-decoration: none;
+        color: #333;
+      }
+
+      @media (max-width: 1050px) {
+        .section-header h2 {
+          margin-top: 180px;
+          /* Adjusted to match your previous layout */
+          font-size: 28px;
+        }
+
+        .reviews-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 600px) {
+        .reviews-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .review-card {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <section class="reviews-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Week Days</h2>
+        </div>
+        <div class="reviews-grid">
+          <% for (let i=0; i < menus.length; i++) { %>
+            <a href="/menus/<%= menus[i]._id %>">
+              <div class="review-card">
+                <p class="reviewer-name">
+                  <%= menus[i].weekday %>
+                </p>
+              </div>
+            </a>
+            <% } %>
+        </div>
+      </div>
+    </section>
+  </body>
+
+  </html>

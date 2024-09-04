@@ -1,0 +1,175 @@
+<% layout('layouts/boilerplate') %>
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>My Meals</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Montserrat', sans-serif;
+                line-height: 1.6;
+                color: #333;
+                background-color: #f5f5f5;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                font-weight: 700;
+            }
+
+            .container {
+                width: 100%;
+                max-width: 100%;
+                padding: 35px;
+                margin: auto;
+                overflow-x: auto;
+                text-align: center;
+            }
+
+            h1 {
+                font-size: 36px;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                border-radius: 50px;
+                overflow: hidden;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                margin: auto;
+            }
+
+            th,
+            td {
+                padding: 12px;
+                text-align: center;
+                border-bottom: 1px solid #ddd;
+                font-size: 16px;
+            }
+
+            th {
+                background-color: #f5f5f5;
+                color: #333;
+            }
+
+            tr {
+                background-color: #fff;
+            }
+
+            .text-warning {
+                color: #ffc107;
+            }
+
+            .text-success {
+                color: #28a745;
+            }
+
+            .text-danger {
+                color: #dc3545;
+            }
+
+            .no-meals {
+                font-style: italic;
+                color: #999;
+            }
+
+            .btn-cancel {
+                background-color: #dc3545;
+                color: #fff;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 20px;
+                cursor: pointer;
+                text-decoration: none;
+            }
+
+            .btn-cancel:hover {
+                background-color: #c82333;
+            }
+
+            @media (max-width: 1050px) {
+                h1 {
+                    font-size: 28px;
+                }
+
+                table {
+                    font-size: 14px;
+                }
+
+                td,
+                th {
+                    padding: 8px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>My Meals</h1>
+            <% const showCancelColumn=myMeals.some(meal=> new Date()< new Date(meal.mealStartDate)); %>
+                    <% if (myMeals.length> 0) { %>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Number of Guests</th>
+                                    <% if (showCancelColumn) { %>
+                                        <th>Cancel Meal</th>
+                                        <% } %>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% myMeals.forEach(meal=> { %>
+                                    <% if (new Date() <=new Date(meal.mealEndDate)) { %>
+                                        <tr>
+                                            <td>
+                                                <%= meal.mealStartDate.toDateString() %>
+                                            </td>
+                                            <td>
+                                                <%= meal.mealEndDate.toDateString() %>
+                                            </td>
+                                            <td>
+                                                <%= meal.mealNumberOfGuests %>
+                                            </td>
+                                            <% if (showCancelColumn) { %>
+                                                <td>
+                                                    <% if (new Date() < new Date(meal.mealStartDate)) { %>
+                                                        <form action="/cancelMeal/<%= meal._id %>" method="POST">
+                                                            <button type="submit" class="btn-cancel">Cancel</button>
+                                                        </form>
+                                                        <% } %>
+                                                </td>
+                                                <% } %>
+                                        </tr>
+                                        <% } %>
+                                            <% }); %>
+                            </tbody>
+                        </table>
+                        <% } else { %>
+                            <p class="no-meals">No meals found.</p>
+                            <% } %>
+        </div><br><br>
+    </body>
+
+    </html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error and Success Messages with Close Button</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin-bottom: -50px;
+            font-family: Arial, sans-serif;
+        }
+
+        main {
+            flex: 1;
+            margin-bottom: -20px;
+
+        }
+
+        .message {
+            position: relative;
+            padding: 5px;
+            padding-left: 20px;
+            padding-right: 40px;
+            border-radius: 50px;
+            margin: 0 60px;
+        }
+
+        .error {
+            background-color: #f5f5f5;
+            color: #B91C1C;
+            border: 0.5px solid #B91C1C;
+        }
+
+        .success {
+            background-color: #f5f5f5;
+            color: #065F46;
+            border: 0.5px solid #065F46;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 0px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <!-- Error Message Component -->
+        <% if(error && error.length) { %>
+            <div class="message error" id="error-message">
+                <%= error %>
+                    <span class="close-btn" onclick="closeMessage('error-message')">&times;</span>
+            </div>
+            <% } %>
+
+                <!-- Success Message Component -->
+                <% if(success && success.length) { %>
+                    <div class="message success" id="success-message">
+                        <%= success %>
+                            <span class="close-btn" onclick="closeMessage('success-message')">&times;</span>
+                    </div>
+                    <% } %>
+    </main>
+
+    <script>
+        function closeMessage(messageId) {
+            const message = document.getElementById(messageId);
+            message.style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>

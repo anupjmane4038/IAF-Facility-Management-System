@@ -1,0 +1,283 @@
+<% layout('layouts/boilerplate') %>
+  <!DOCTYPE html>
+  <html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave List</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Montserrat', sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f5f5f5;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-weight: 700;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 100%;
+        padding: 35px;
+        margin: auto;
+        overflow-x: auto;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 36px;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      h2 {
+        margin-bottom: -20px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 35px;
+        font-size: 16px;
+      }
+
+      th,
+      td {
+        padding: 12px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #f5f5f5;
+        color: #333;
+      }
+
+      tr {
+        background-color: #fff;
+      }
+
+      .btn-success {
+        background-color: #28a745;
+        color: #fff;
+        padding: 10px 20px;
+        transition: background-color 0.3s;
+        text-decoration: none;
+      }
+
+      .btn-danger {
+        background-color: #dc3545;
+        color: #fff;
+        padding: 10px 20px;
+        transition: background-color 0.3s;
+        text-decoration: none;
+      }
+
+      .btn-success-1 {
+        font-size: 16px;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin: 5px 5px;
+        text-decoration: none;
+      }
+
+      .btn-danger-1 {
+        font-size: 16px;
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        text-decoration: none;
+        margin: 5px 5px;
+      }
+
+      .btn-success-1:hover,
+      .btn-success:hover {
+        background-color: #218838;
+      }
+
+      .btn-danger-1:hover,
+      .btn-danger:hover {
+        background-color: #c82333;
+      }
+
+      .no-leaves {
+        font-style: italic;
+        color: #999;
+      }
+
+      .button-container {
+        margin: 20px 0;
+        text-align: center;
+      }
+
+      .action-btn {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        margin: 0 5px;
+        text-decoration: none;
+        transition: background-color 0.3s;
+      }
+
+      .action-btn:hover {
+        background-color: #0056b3;
+      }
+
+      @media (max-width: 1050px) {
+        h1 {
+          font-size: 28px;
+        }
+
+        table {
+          font-size: 14px;
+        }
+
+        td,
+        th {
+          padding: 8px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Leave List</h1>
+      <div id="filteredLeaves">
+        <% if (leavesByMonthYear && Object.keys(leavesByMonthYear).length> 0) { %>
+          <% Object.keys(leavesByMonthYear).forEach(function (monthYear) { const
+            monthYearLeaves=leavesByMonthYear[monthYear]; const daysInMonth=new Date(new Date(monthYear + " 1"
+            ).getFullYear(), new Date(monthYear + " 1" ).getMonth() + 1, 0).getDate(); const [month,
+            year]=monthYear.split(" ");
+        %>
+          <div id=" <%=monthYear %>">
+            <h2>
+              <%= monthYear %>
+            </h2>
+            <% if(currentUser.card===-1){ %>
+              <div class="button-container">
+                <button class="btn-success-1" onclick="window.location.href='/export/<%= month %>/<%= year %>'">Export
+                  as
+                  Excel</button>
+                <button class="btn-danger-1" onclick="confirmDelete('<%= encodeURIComponent(monthYear) %>')">Delete
+                  Table</button>
+              </div>
+              <% } %>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Card Number</th>
+                      <th>Start Date</th>
+                      <th>End Date</th>
+                      <th>Leave</th>
+                      <th>Total Leaves</th>
+                      <th>Active Days</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% Object.keys(monthYearLeaves).forEach(function (card) { const combinedLeave=monthYearLeaves[card];
+                      if(combinedLeave.card && combinedLeave.card !==-1 && combinedLeave.card !==-2 ) {
+                      combinedLeave.remainingDays=daysInMonth - combinedLeave.totalLeaves; %>
+                      <% if (combinedLeave.leaves.length===0) { %>
+                        <tr>
+                          <td>
+                            <%= combinedLeave.card %>
+                          </td>
+                          <td colspan="3" class="no-leaves">No leaves taken</td>
+                          <td>0</td>
+                          <td>
+                            <%= combinedLeave.remainingDays %>
+                          </td>
+                        </tr>
+                        <% } else { %>
+                          <% combinedLeave.leaves.forEach(function (leave, index) { %>
+                            <tr>
+                              <% if (index===0) { %>
+                                <td rowspan="<%= combinedLeave.leaves.length %>">
+                                  <%= leave.card %>
+                                </td>
+                                <% } %>
+                                  <td>
+                                    <%= formatDate(leave.leaveStartDate) %>
+                                  </td>
+                                  <td>
+                                    <%= formatDate(leave.leaveEndDate) %>
+                                  </td>
+                                  <td>
+                                    <%= leave.totalLeaves %>
+                                  </td>
+                                  <% if (index===0) { %>
+                                    <td rowspan="<%= combinedLeave.leaves.length %>">
+                                      <%= combinedLeave.totalLeaves %>
+                                    </td>
+                                    <td rowspan="<%= combinedLeave.leaves.length %>">
+                                      <%= combinedLeave.remainingDays %>
+                                    </td>
+                                    <% } %>
+                            </tr>
+                            <% }) %>
+                              <% } %>
+                                <% } %>
+                                  <% }) %>
+                  </tbody>
+                </table>
+      </div>
+      <% }) %>
+        <% } else { %>
+          <p class="no-leaves">No leave data available.</p>
+          <% } %>
+    </div>
+    </div><br><br>
+  </body>
+
+  </html>
+
+  <script>
+    function confirmDelete(monthYear) {
+      if (confirm('Are you sure you want to delete the leaves for ' + decodeURIComponent(monthYear) + '?')) {
+        fetch('/leavelist/delete/' + monthYear, {
+          method: 'DELETE'
+        })
+          .then(response => response.json())
+          .then(data => {
+            alert(data.message);
+            location.reload(); // Reload the page to reflect changes
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+    }
+  </script>

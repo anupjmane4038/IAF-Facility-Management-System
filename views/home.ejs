@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indian Air Force Facility Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f5f5f5;
+    }
+
+    header {
+      background-color: transparent;
+      /* Start with a transparent background */
+      color: #fff;
+      padding: 10px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+      transition: background-color 0.3s;
+    }
+
+    header.opaque {
+      background-color: #002147;
+
+      /* Change to a solid color on scroll */
+    }
+
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      margin-left: 20px;
+    }
+
+    .menu-icon {
+      font-size: 24px;
+      cursor: pointer;
+      display: none;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .nav-links li {
+      margin: 0 10px;
+      position: relative;
+    }
+
+    .nav-links a,
+    .dropdown a,
+    .profile-dropdown a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      padding: 10px 15px;
+      display: block;
+    }
+
+    .nav-links a:hover,
+    .dropdown a:hover,
+    .profile-dropdown a:hover {
+      color: #ccc;
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      background-color: #002147;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      width: 160px;
+      z-index: 1000;
+      border-bottom-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+      transition: background-color 0.3s;
+      list-style: none;
+    }
+
+    .profile-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      text-align: center;
+      background-color: #002147;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      width: 160px;
+      z-index: 1000;
+      border-bottom-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+      transition: background-color 0.3s;
+      list-style: none;
+    }
+
+    .show {
+      display: block !important;
+    }
+
+    @media (min-width: 1051px) {
+
+      .dropdown,
+      .profile-dropdown {
+        padding-bottom: 15px;
+      }
+    }
+
+    @media (max-width: 1050px) {
+      .menu-icon {
+        display: block;
+        margin-right: 15px;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 60%;
+        transform: translateX(-50%);
+        background: #002147;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        width: 50%;
+        text-align: center;
+        padding-bottom: 20px;
+        border-bottom-left-radius: 50px;
+        border-bottom-right-radius: 50px;
+      }
+
+      .nav-links.show {
+        display: flex;
+      }
+
+      .nav-links li {
+        margin: 10px 0;
+      }
+
+      .dropdown {
+        display: none;
+        flex-direction: column;
+        position: relative;
+        background: #002147;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0);
+        width: 100%;
+        text-align: center;
+        margin-bottom: 0;
+        list-style: none;
+      }
+
+      .dropdown.show {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .dropdown a {
+        padding: 10px 15px;
+      }
+
+      .profile-dropdown {
+        display: none;
+        flex-direction: column;
+        position: relative;
+        background: #002147;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0);
+        width: 100%;
+        text-align: center;
+        margin-bottom: 0;
+        list-style: none;
+      }
+
+      .profile-dropdown.show {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .profile-dropdown a {
+        padding: 10px 15px;
+      }
+    }
+
+    .hero {
+      height: 100vh;
+      background: url('/Images/IAF\ Home.avif') no-repeat center center/cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      border-bottom-right-radius: 50px;
+      border-bottom-left-radius: 50px;
+    }
+
+    .hero-text {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .hero-text h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .hero-text p {
+      font-size: 24px;
+    }
+
+    .section {
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    #about {
+      padding-top: 40px;
+    }
+
+    #services {
+      padding-top: 10px;
+    }
+
+    .section h2 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    .section p {
+      margin: 0 10px;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .service-container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      gap: 30px;
+    }
+
+    .service {
+      flex: 1 1 300px;
+      padding: 30px;
+      border-radius: 50px;
+      background-color: #fff;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .service:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .service h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .service p {
+      font-size: 16px;
+    }
+
+    @media (max-width: 1050px) {
+
+      .hero-text h1 {
+        font-size: 36px;
+      }
+
+      .hero-text p {
+        font-size: 18px;
+      }
+
+      .section h2 {
+        font-size: 28px;
+      }
+
+      .section p {
+        font-size: 16px;
+      }
+    }
+
+    main {
+      flex: 1;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background-color: #002147;
+      color: #fff;
+      border-top-left-radius: 50px;
+      border-top-right-radius: 50px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">IAF Facility Management</div>
+    <nav>
+      <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+      <ul class="nav-links" id="navLinks">
+        <% if(currentUser) { %>
+
+          <!-- Inventory Dropdown -->
+          <% if (currentUser.card !==null) { %>
+            <li>
+              <a href="#" onclick="toggleDropdown(event, 'inventoryDropdown')">Inventory &#8595;</a>
+              <ul class="dropdown" id="inventoryDropdown">
+                <% if (currentUser.card===-1) { %>
+                  <li><a href="/admin/manage-categories">Add Category</a></li>
+                  <% } %>
+                    <% if (currentUser.card===-1 || currentUser.card===-2) { %>
+                      <li><a href="/admin/categories-list">Category List</a></li>
+                      <% } %>
+                        <% if (currentUser.card!==-1 && currentUser.card!==-2) { %>
+                          <li><a href="/user/my-category">My Category</a></li>
+                          <% } %>
+              </ul>
+            </li>
+            <% } %>
+              <% if (currentUser.card===-1 || currentUser.card===-2 || currentUser.card===null) { %>
+                <!-- Rooms Dropdown -->
+                <li>
+                  <a href="#" onclick="toggleDropdown(event, 'roomsDropdown')">Rooms &#8595;</a>
+                  <ul class="dropdown" id="roomsDropdown">
+                    <% if (currentUser.card===-1) { %>
+                      <li><a href="/createRoom">Add Room</a></li>
+                      <li><a href="/bookingRequests">Requests</a></li>
+                      <% } %>
+                        <li><a href="/roomlist">Room List</a></li>
+                        <% if (currentUser.card !==-1 && currentUser.card !==-2) { %>
+                          <li><a href="/userBookings">My Bookings</a></li>
+                          <% } %>
+                            <li><a href="/approvedBookings">Slots</a></li>
+                  </ul>
+                </li>
+                <% } %>
+
+                  <!-- Mess Dropdown -->
+                  <li>
+                    <a href="#" onclick="toggleDropdown(event, 'messDropdown')">Mess &#8595;</a>
+                    <ul class="dropdown" id="messDropdown">
+                      <li><a href="/menus">Menu</a></li>
+                      <% if (currentUser.card===-1 || currentUser.card===-2) { %>
+                        <li><a href="/meal-list">Meal List</a></li>
+                        <li><a href="/leavelist">Leave List</a></li>
+                        <% } %>
+                          <% if (currentUser.card===null) { %>
+                            <li><a href="/guest-meals">Add Meal</a></li>
+                            <li><a href="/my-meals">My Meals</a></li>
+                            <li><a href="/review">Review</a></li>
+                            <% } %>
+                              <% if (currentUser.card !==-1 && currentUser.card !==-2 && currentUser.card !==null) { %>
+                                <li><a href="/putleave">Leave</a></li>
+                                <li><a href="/review">Review</a></li>
+                                <% } %>
+                                  <li><a href="/reviewlist">Review List</a></li>
+                    </ul>
+                  </li>
+
+                  <!-- Clients Dropdown -->
+                  <% if (currentUser.card===-1 || currentUser.card===-2) { %>
+                    <li>
+                      <a href="#" onclick="toggleDropdown(event, 'clientsDropdown')">Clients
+                        &#8595;</a>
+                      <ul class="dropdown" id="clientsDropdown">
+                        <li><a href="/members">Members</a></li>
+                        <li><a href="/guests">Guests</a></li>
+                      </ul>
+                    </li>
+                    <% } %>
+
+                      <!-- Profile Dropdown -->
+                      <li>
+                        <a href="#" onclick="toggleDropdown(event, 'profileDropdown')">Profile
+                          &#8595;</a>
+                        <ul class="profile-dropdown" id="profileDropdown">
+                          <li><a href="/profile">My Profile</a></li>
+                          <li><a href="/logout">Logout</a></li>
+                        </ul>
+                      </li>
+
+                      <% } else { %>
+                        <!-- For guests -->
+                        <li><a href="/register">SIGN UP</a></li>
+                        <li><a href="/login">SIGN IN</a></li>
+                        <% } %>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero" id="home" style="border-bottom-right-radius:50px; border-bottom-left-radius:50px;">
+    <div class="hero-text">
+      <h1>Welcome to the IAF Facility Management System</h1>
+      <p>Serving our heroes with pride</p>
+    </div>
+  </section>
+
+  <section class="section about" id="about">
+    <h2>About Us</h2>
+    <p>Welcome to the Indian Air Force Facility Management System! We are dedicated to enhancing your experience by
+      providing efficient management of facilities and resources within the organisation. Our goal is to ensure seamless
+      operations and superior service delivery to all members.</p>
+  </section>
+
+  <section class="section services" id="services">
+    <h2>Services</h2>
+    <div class="service-container">
+
+      <div class="service">
+        <img src="/Images/Inventory Management.jpg" alt="Inventory Management"
+          style="width: 100%; max-height: 200px; object-fit: cover; border-top-left-radius: 25px; border-top-right-radius: 25px;"><br><br>
+        <h3>Inventory Management</h3>
+        <p>Efficiently manage inventory across various categories including Furniture, Utensils, Electronic
+          Appliances,
+          and more...</p>
+      </div>
+
+      <div class="service">
+        <img src="/Images/Room Management.jpg" alt="Room Management"
+          style="width: 100%; max-height: 200px; object-fit: cover; border-top-left-radius: 25px; border-top-right-radius: 25px;"><br><br>
+        <h3>Room Management</h3>
+        <p>Experience hassle-free room accommodation with our user-friendly booking system...</p>
+      </div>
+
+      <div class="service">
+        <img src="/Images/Dining Management.jpg" alt="Dining Management"
+          style="width: 100%; max-height: 200px; object-fit: cover; border-top-left-radius: 25px; border-top-right-radius: 25px;"><br><br>
+        <h3>Dining Management</h3>
+        <p>Enjoy a variety of culinary delights prepared by our skilled chefs. From traditional favorites to
+          contemporary dishes...</p>
+      </div>
+
+    </div><br>
+  </section>
+
+  <script>
+
+    // Add this script just before the closing </body> tag in your HTML file
+
+
+    window.addEventListener('scroll', function () {
+      const header = document.querySelector('header');
+      const scrollTop = window.scrollY;
+
+      if (scrollTop > 50) {
+        header.classList.add('opaque');
+      } else {
+        header.classList.remove('opaque');
+      }
+    });
+
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('show');
+    }
+
+    function toggleDropdown(event, dropdownId) {
+      event.preventDefault();
+      const dropdownMenu = document.getElementById(dropdownId);
+      dropdownMenu.classList.toggle('show');
+
+      // Hide the other dropdowns if they're open
+      const otherDropdowns = ['inventoryDropdown', 'roomsDropdown', 'messDropdown', 'clientsDropdown', 'profileDropdown'].filter(id => id !== dropdownId);
+      otherDropdowns.forEach(id => {
+        const otherDropdown = document.getElementById(id);
+        if (otherDropdown && otherDropdown.classList.contains('show')) {
+          otherDropdown.classList.remove('show');
+        }
+      });
+    }
+
+
+    // Close dropdowns when clicking outside the navbar
+    document.addEventListener('click', function (event) {
+      const navLinks = document.getElementById('navLinks');
+      const dropdowns = document.querySelectorAll('.dropdown, .profile-dropdown');
+
+      if (!navLinks.contains(event.target)) {
+        dropdowns.forEach(function (dropdown) {
+          if (dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+          }
+        });
+      }
+    });
+  </script>
+
+  <footer id="contact">
+    <p>&copy; 2024 Indian Air Force Facility Management Department. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>

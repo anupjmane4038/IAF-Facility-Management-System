@@ -1,0 +1,179 @@
+<% layout('layouts/boilerplate') %>
+  <!DOCTYPE html>
+  <html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Section</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Montserrat', sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f5f5f5;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-weight: 700;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 100%;
+        padding: 35px;
+        margin: auto;
+        overflow-x: auto;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 36px;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .menu-grid {
+        display: grid;
+        gap: 30px;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        margin-top: 20px;
+        /* Adjusted margin to match the Approved Bookings table */
+      }
+
+      .menu-card {
+        background-color: #fff;
+        border-radius: 50px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .menu-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .menu-content {
+        padding: 30px;
+      }
+
+      .menu-name {
+        font-size: 25px;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+
+      .menu-details {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #666;
+      }
+
+      button {
+        margin-top: 10px;
+        margin-bottom: -10px;
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #002147;
+        border: none;
+        border-radius: 20px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        color: #fff;
+      }
+
+      button:hover {
+        background-color: #004085;
+      }
+
+      @media (max-width: 960px) {
+        h1 {
+          font-size: 28px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Menu</h1>
+
+      <div class="menu-grid">
+        <div class="menu-card">
+          <div class="menu-content" align="center">
+            <img src="/Images/Breakfast.cms" alt="Breakfast"
+              style="width: 100%; max-height: 200px; object-fit: cover; border-top-left-radius: 25px; border-top-right-radius: 25px;">
+            <br><br>
+            <p class="menu-name"><strong>BREAKFAST</strong></p>
+            <p class="menu-details">
+              <%= menu.breakfast.fixed %>
+            </p>
+            <p class="menu-details">
+              <%= menu.breakfast.variable_breakfast %>
+            </p>
+          </div>
+        </div>
+
+        <div class="menu-card">
+          <div class="menu-content" align="center">
+            <img src="/Images/Lunch.jpg" alt="Lunch"
+              style="width: 100%; max-height: 200px; object-fit: cover; border-top-left-radius: 25px; border-top-right-radius: 25px;">
+            <br><br>
+            <p class="menu-name"><strong>LUNCH</strong></p>
+            <p class="menu-details">
+              <%= menu.lunch.fixed %>
+            </p>
+            <p class="menu-details">
+              <%= menu.lunch.variable_sabji %>
+            </p>
+          </div>
+        </div>
+
+        <div class="menu-card">
+          <div class="menu-content" align="center">
+            <img src="/Images/Dinner.cms" alt="Dinner"
+              style="width: 100%; max-height: 200px; object-fit: cover; border-top-left-radius: 25px; border-top-right-radius: 25px;">
+            <br><br>
+            <p class="menu-name"><strong>DINNER</strong></p>
+            <p class="menu-details">
+              <%= menu.dinner.fixed %>
+            </p>
+            <p class="menu-details">
+              <%= menu.dinner.variable_sabji %>
+            </p>
+            <p class="menu-details">
+              <%= menu.dinner.variable_sweets %>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <% if (currentUser.card===-1) { %>
+        <div class="form-group" align="center"><br>
+          <form action="/menus/<%= menu._id %>/edit" method="get">
+            <button>
+              Edit Menu
+            </button>
+          </form>
+        </div>
+        <% } %>
+    </div><br>
+  </body>
+
+  </html>
